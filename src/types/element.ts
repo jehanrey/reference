@@ -3,4 +3,4 @@ export type BaseAttributes<
   O extends keyof JSX.IntrinsicElements[T] | void = void,
 > = O extends keyof JSX.IntrinsicElements[T]
   ? Omit<JSX.IntrinsicElements[T], O>
-  : JSX.IntrinsicElements[T];
+  : JSX.IntrinsicElements[T]
