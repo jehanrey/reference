@@ -7,8 +7,8 @@ import {
 } from 'react'
 
 import { Leaf } from '../../types/object'
+import { randomNumber } from '../../utils/number'
 import { parseClassNames } from '../../utils/parseClassNames'
-import { randomInt } from '../../utils/randomInt'
 import Checkbox from '../Checkbox'
 import Icon from '../Icon'
 import { TablePaginationProps } from '../Pagination'
@@ -86,7 +86,9 @@ const Table = <T extends TableRow>({
   isChecked,
   ...rowProps
 }: Props<T>) => {
-  const loadingDataSource = Array.from(Array(loadingRows ?? randomInt(1, 10)))
+  const loadingDataSource = Array.from(
+    Array(loadingRows ?? randomNumber(1, 10)),
+  )
 
   const checkboxColumn: TableColumn<T> = useMemo(() => {
     return {

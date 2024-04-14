@@ -7,7 +7,7 @@
   body {
     height: 100svh;
     max-width: 100vw;
-    overflow: hidden;
+    /* overflow: hidden; */
     letter-spacing: -0.2px;
     color: #2a2a2f;
   }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import Button from '../components/Button'
+import DatePicker from '../components/DatePicker'
 import Popover from '../components/Popover'
 import Table, { TableColumns } from '../components/Table'
 import useCheckbox from '../components/Table/hooks/useCheckbox'
@@ -41,17 +42,17 @@ const d2 = [
 const Palette = () => {
   return (
     <div className="flex h-[20px] gap-[2.5px]">
-      <div className="bg-something-50 aspect-square h-auto"></div>
-      <div className="bg-something-100 aspect-square h-auto"></div>
-      <div className="bg-something-200 aspect-square h-auto"></div>
-      <div className="bg-something-300 aspect-square h-auto"></div>
-      <div className="bg-something-400 aspect-square h-auto"></div>
-      <div className="bg-something-500 aspect-square h-auto"></div>
-      <div className="bg-something-600 aspect-square h-auto"></div>
-      <div className="bg-something-700 aspect-square h-auto"></div>
-      <div className="bg-something-800 aspect-square h-auto"></div>
-      <div className="bg-something-900 aspect-square h-auto"></div>
-      <div className="bg-something-950 aspect-square h-auto"></div>
+      <div className="aspect-square h-auto bg-something-50"></div>
+      <div className="aspect-square h-auto bg-something-100"></div>
+      <div className="aspect-square h-auto bg-something-200"></div>
+      <div className="aspect-square h-auto bg-something-300"></div>
+      <div className="aspect-square h-auto bg-something-400"></div>
+      <div className="aspect-square h-auto bg-something-500"></div>
+      <div className="aspect-square h-auto bg-something-600"></div>
+      <div className="aspect-square h-auto bg-something-700"></div>
+      <div className="aspect-square h-auto bg-something-800"></div>
+      <div className="aspect-square h-auto bg-something-900"></div>
+      <div className="aspect-square h-auto bg-something-950"></div>
     </div>
   )
 }
@@ -66,6 +67,9 @@ const Test = () => {
   return (
     <div>
       <div className="text-test">Hello from Test</div>
+      <div>
+        <DatePicker view="week" />
+      </div>
       <div>
         <h2>Palette</h2>
         <ul className="*:font-bold">
