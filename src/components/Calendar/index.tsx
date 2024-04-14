@@ -7,14 +7,15 @@ import YearCalendar from './YearCalendar'
 import { Level } from './types'
 
 interface Props {
-  view?: Level
+  level?: Level
+  current?: Dayjs
   onClick?: (dayjs: Dayjs) => void
 }
 
-const Calendar = ({ view, ...props }: Props) => {
-  if (view === 'year') return <YearCalendar {...props} />
-  if (view === 'month') return <MonthCalendar {...props} />
-  if (view === 'week') return <WeekCalendar {...props} />
+const Calendar = ({ level, ...props }: Props) => {
+  if (level === 'year') return <YearCalendar {...props} />
+  if (level === 'month') return <MonthCalendar {...props} />
+  if (level === 'week') return <WeekCalendar {...props} />
   return <DayCalendar {...props} />
 }
 
