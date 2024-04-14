@@ -55,7 +55,7 @@ const WeekCalendar = ({
           if (day.get('day') === startOfWeek) {
             return (
               <>
-                <div className="flex aspect-square items-center justify-center p-[6px]">{`W${day.week()}`}</div>
+                <div className="flex aspect-square items-center justify-center p-[6px] text-[10px] text-gray-400">{`W${day.week()}`}</div>
                 {date}
               </>
             )

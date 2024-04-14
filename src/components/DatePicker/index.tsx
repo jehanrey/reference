@@ -2,10 +2,8 @@ import dayjs, { Dayjs } from 'dayjs'
 import { type FC, useEffect, useState } from 'react'
 
 import Calendar from '../Calendar'
-import { View } from '../Calendar/types'
+import { Level } from '../Calendar/types'
 import { Popover, PopoverContent, PopoverTrigger } from '../Popover'
-
-type Target = 'date' | 'week' | 'month'
 
 type Date = Dayjs | null
 
@@ -24,21 +22,21 @@ type Multi = {
 type Value = Single | Multi
 
 type Props = {
-  view?: View
-  target?: Target
+  view?: Level
+  target?: Level
 } & Value
 
 const DatePicker: FC<Props> = ({
   multi = false,
   value,
   view: initialView = 'day',
-  target = 'date',
+  target = 'day',
 }) => {
   const init = multi ? [dayjs(), dayjs()] : dayjs()
 
   const startDate = Array.isArray(init) ? init.at(0) : init
 
-  const [currentView, setCurrentView] = useState<View>(initialView)
+  const [currentView, setCurrentView] = useState<Level>(initialView)
 
   const onClick = (dayjs: Dayjs) => {
     if (currentView === 'year') {

@@ -41,7 +41,7 @@ export const getDays = ({
 
 export const getMonths = (current: Dayjs) => {
   const startMonth = current.startOf('year')
-  const endMonth = startMonth.add(12, 'months')
+  const endMonth = startMonth.add(11, 'months')
   const months = []
   let currMonth = startMonth
   while (!currMonth.isAfter(endMonth)) {

@@ -4,10 +4,10 @@ import DayCalendar from './DayCalendar'
 import MonthCalendar from './MonthCalendar'
 import WeekCalendar from './WeekCalendar'
 import YearCalendar from './YearCalendar'
-import { View } from './types'
+import { Level } from './types'
 
 interface Props {
-  view?: View
+  view?: Level
   onClick?: (dayjs: Dayjs) => void
 }
 
