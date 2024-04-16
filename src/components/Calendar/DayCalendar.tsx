@@ -2,7 +2,6 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { useMemo } from 'react'
 
 import { rotate } from '../../utils/array'
-import { parseClassNames } from '../../utils/parseClassNames'
 
 import { DAYS_OF_WEEK } from './constants'
 import { type DayOfWeek } from './types'
@@ -36,13 +35,9 @@ const DayCalendar = ({
         {days.map((day) => {
           const sameMonth = day.isSame(current, 'month')
           if (!sameMonth) return <div />
-          const today = day.isSame(current, 'date')
           return (
             <button
-              className={parseClassNames('aspect-square p-[6px]', [
-                'font-bold text-primary',
-                today,
-              ])}
+              className="aspect-square p-[6px] hover:bg-primary hover:font-bold hover:text-white"
               onClick={() => onClick?.(day)}
             >
               {day.format('D')}

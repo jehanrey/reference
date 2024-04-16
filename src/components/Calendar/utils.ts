@@ -4,7 +4,7 @@ import { roundToClosest } from '../../utils/number'
 
 import { DayOfWeek } from './types'
 
-export function getStartOfWeek(date: Dayjs, firstDayOfWeek: DayOfWeek = 1) {
+export function getStartOfWeek(date: Dayjs, firstDayOfWeek: DayOfWeek) {
   let value = dayjs(date)
   while (value.get('day') !== firstDayOfWeek) {
     value = value.subtract(1, 'day')
@@ -12,7 +12,7 @@ export function getStartOfWeek(date: Dayjs, firstDayOfWeek: DayOfWeek = 1) {
   return value
 }
 
-export function getEndOfWeek(date: Dayjs, startOfWeek: DayOfWeek = 1) {
+export function getEndOfWeek(date: Dayjs, startOfWeek: DayOfWeek) {
   let value = dayjs(date)
   const lastDayOfWeek = 6 - startOfWeek
   while (value.get('day') !== lastDayOfWeek) {
@@ -23,11 +23,11 @@ export function getEndOfWeek(date: Dayjs, startOfWeek: DayOfWeek = 1) {
 
 export const getDays = ({
   current,
-  startOfWeek,
+  startOfWeek = 0,
 }: {
   current: Dayjs
   startOfWeek?: DayOfWeek
-}): Array<Dayjs> => {
+}) => {
   const startDay = getStartOfWeek(current.startOf('month'), startOfWeek)
   const endDay = getEndOfWeek(current.endOf('month'), startOfWeek)
   let currDay = startDay
@@ -37,6 +37,28 @@ export const getDays = ({
     currDay = currDay.add(1, 'day')
   }
   return days
+}
+
+export const getWeeks = ({
+  current,
+  startOfWeek = 0,
+}: {
+  current: Dayjs
+  startOfWeek?: DayOfWeek
+}) => {
+  const startDay = getStartOfWeek(current.startOf('month'), startOfWeek)
+  const endDay = getEndOfWeek(current.endOf('month'), startOfWeek)
+  let currDay = startDay
+  const days = []
+  while (!currDay.isAfter(endDay, 'day')) {
+    days.push(currDay)
+    currDay = currDay.add(1, 'day')
+  }
+  const weeks = []
+  for (let i = 0; i < days.length; i += 7) {
+    weeks.push(days.slice(i, i + 7))
+  }
+  return weeks
 }
 
 export const getMonths = (current: Dayjs) => {

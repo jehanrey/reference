@@ -1,8 +1,6 @@
 import dayjs, { type Dayjs } from 'dayjs'
 import { useMemo } from 'react'
 
-import { parseClassNames } from '../../utils/parseClassNames'
-
 import { getYears } from './utils'
 
 interface Props {
@@ -15,13 +13,9 @@ const YearCalendar = ({ current = dayjs(), onClick }: Props) => {
   return (
     <div className="grid grid-cols-3">
       {years.map((year) => {
-        const thisYear = year.isSame(current, 'year')
         return (
           <button
-            className={parseClassNames('aspect-[3/2] p-[16px]', [
-              'font-bold text-primary',
-              thisYear,
-            ])}
+            className="aspect-[3/2] p-[16px] hover:bg-primary hover:text-white"
             onClick={() => onClick?.(year)}
           >
             {year.format('YYYY')}

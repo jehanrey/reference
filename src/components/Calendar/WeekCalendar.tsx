@@ -7,7 +7,7 @@ import { parseClassNames } from '../../utils/parseClassNames'
 
 import { DAYS_OF_WEEK } from './constants'
 import { type DayOfWeek } from './types'
-import { getDays } from './utils'
+import { getDays, getWeeks } from './utils'
 
 dayjs.extend(weekOfYear)
 
@@ -27,6 +27,10 @@ const WeekCalendar = ({
     () => getDays({ current, startOfWeek }),
     [current, startOfWeek],
   )
+  const weeks = useMemo(
+    () => getWeeks({ current, startOfWeek }),
+    [current, startOfWeek],
+  )
   const daysOfWeek = ['', ...rotate(DAYS_OF_WEEK, startOfWeek)]
   return (
     <div className="relative overflow-clip">
@@ -35,34 +39,23 @@ const WeekCalendar = ({
           <span className="aspect-square p-[6px]">{day}</span>
         ))}
       </div>
-      <div className="grid grid-cols-8">
-        {days.map((day) => {
-          const sameMonth = day.isSame(current, 'month')
-          const today = day.isSame(current, 'date')
-          const date = !sameMonth ? (
-            <div />
-          ) : (
-            <button
-              className={parseClassNames('aspect-square p-[6px]', [
-                'font-bold text-primary',
-                today,
-              ])}
-              onClick={() => onClick?.(day)}
-            >
-              {day.format('D')}
-            </button>
-          )
-          if (day.get('day') === startOfWeek) {
-            return (
-              <>
-                <div className="flex aspect-square items-center justify-center p-[6px] text-[10px] text-gray-400">{`W${day.week()}`}</div>
-                {date}
-              </>
-            )
-          }
-          return date
-        })}
-      </div>
+      {weeks.map((week) => {
+        const weekNumber = week.at(0)?.week()
+        return (
+          <button className="group grid w-full grid-cols-8 hover:bg-primary">
+            <span className="flex aspect-square items-center justify-center p-[6px] text-[10px] text-gray-400">{`W${weekNumber}`}</span>
+            {week.map((day) => {
+              const sameMonth = day.isSame(current, 'month')
+              if (!sameMonth) return <div />
+              return (
+                <span className="flex aspect-square items-center justify-center p-[6px] group-hover:text-white">
+                  {day.format('D')}
+                </span>
+              )
+            })}
+          </button>
+        )
+      })}
     </div>
   )
 }

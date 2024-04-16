@@ -5,7 +5,6 @@ type Enumerate<
   ? Acc[number]
   : Enumerate<N, [...Acc, Acc['length']]>
 
-export type NumRange<F extends number, T extends number> = Exclude<
-  Enumerate<T>,
-  Enumerate<F>
->
+export type NumRange<F extends number, T extends number> =
+  | Exclude<Enumerate<T>, Enumerate<F>>
+  | T
