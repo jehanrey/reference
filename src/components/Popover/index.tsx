@@ -220,10 +220,8 @@ const PopoverComponent = ({
       <PopoverTrigger>
         <InjectContext>{trigger}</InjectContext>
       </PopoverTrigger>
-      <PopoverContent>
-        <div className="rounded border border-neutral bg-white px-[20px] py-[10px]">
-          <InjectContext>{content}</InjectContext>
-        </div>
+      <PopoverContent className="rounded border border-neutral bg-white px-[20px] py-[10px]">
+        <InjectContext>{content}</InjectContext>
       </PopoverContent>
     </Popover>
   )

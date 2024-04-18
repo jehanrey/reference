@@ -68,7 +68,7 @@ const Test = () => {
     <div>
       <div className="text-test">Hello from Test</div>
       <div>
-        <DatePicker level="day" />
+        <DatePicker picker="day" />
       </div>
       <div>
         <h2>Palette</h2>

@@ -3,7 +3,6 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import { useMemo } from 'react'
 
 import { rotate } from '../../utils/array'
-import { parseClassNames } from '../../utils/parseClassNames'
 
 import { DAYS_OF_WEEK } from './constants'
 import { type DayOfWeek } from './types'
@@ -42,7 +41,10 @@ const WeekCalendar = ({
       {weeks.map((week) => {
         const weekNumber = week.at(0)?.week()
         return (
-          <button className="group grid w-full grid-cols-8 hover:bg-primary">
+          <button
+            className="group grid w-full grid-cols-8 hover:bg-primary"
+            onClick={() => onClick?.(week[0])}
+          >
             <span className="flex aspect-square items-center justify-center p-[6px] text-[10px] text-gray-400">{`W${weekNumber}`}</span>
             {week.map((day) => {
               const sameMonth = day.isSame(current, 'month')

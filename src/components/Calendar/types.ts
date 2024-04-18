@@ -1,7 +1,5 @@
 import { NumRange } from '../../types/number'
 
-import { LEVELS } from './constants'
-
-export type Level = (typeof LEVELS)[number]
+export type Picker = 'day' | 'week' | 'month' | 'year'
 
 export type DayOfWeek = NumRange<0, 6>
