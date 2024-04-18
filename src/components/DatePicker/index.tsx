@@ -201,7 +201,7 @@ const DatePicker: FC<Props> = ({
         </div>
       </PopoverTrigger>
       <PopoverContent className="isolate border-collapse rounded border-neutral bg-white text-sm shadow-lg">
-        <div className="grid auto-cols-max auto-rows-max px-[20px] py-[10px] font-medium">
+        <div className="grid auto-cols-max auto-rows-max px-[20px] py-[10px] font-medium *:select-none">
           <MotionConfig transition={transition}>
             <div className="flex items-center justify-between">
               <div className="flex gap-[10px]">

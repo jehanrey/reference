@@ -6,7 +6,7 @@ import { rotate } from '../../utils/array'
 
 import { DAYS_OF_WEEK } from './constants'
 import { type DayOfWeek } from './types'
-import { getDays, getWeeks } from './utils'
+import { getWeeks } from './utils'
 
 dayjs.extend(weekOfYear)
 
@@ -22,10 +22,6 @@ const WeekCalendar = ({
   startOfWeek = 0,
   onClick,
 }: Props) => {
-  const days = useMemo(
-    () => getDays({ current, startOfWeek }),
-    [current, startOfWeek],
-  )
   const weeks = useMemo(
     () => getWeeks({ current, startOfWeek }),
     [current, startOfWeek],

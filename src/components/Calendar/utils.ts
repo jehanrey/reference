@@ -88,7 +88,7 @@ export const getYears = (current: Dayjs) => {
 
 export const transition: Transition = {
   type: 'spring',
-  bounce: 0.15,
+  bounce: 0.2,
   duration: 0.25,
 }
 
