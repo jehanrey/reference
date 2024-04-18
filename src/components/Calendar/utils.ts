@@ -1,4 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs'
+import { Transition, Variants } from 'framer-motion'
 
 import { roundToClosest } from '../../utils/number'
 
@@ -83,4 +84,22 @@ export const getYears = (current: Dayjs) => {
     currYear = currYear.add(1, 'year')
   }
   return years
+}
+
+export const transition: Transition = {
+  type: 'spring',
+  bounce: 0.15,
+  duration: 0.25,
+}
+
+export const variants: Variants = {
+  enter: (direction: number) => ({
+    x: `${100 * direction}%`,
+    opacity: direction == 0 ? 0 : 1,
+  }),
+  middle: { x: '0%', opacity: 1 },
+  exit: (direction: number) => ({
+    x: `${-100 * direction}%`,
+    opacity: direction == 0 ? 0 : 1,
+  }),
 }

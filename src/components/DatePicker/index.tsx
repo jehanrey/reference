@@ -1,5 +1,5 @@
 import dayjs, { Dayjs, ManipulateType } from 'dayjs'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, MotionConfig, motion } from 'framer-motion'
 import {
   type FC,
   useCallback,
@@ -10,7 +10,8 @@ import {
 } from 'react'
 
 import Calendar from '../Calendar'
-import { Picker } from '../Calendar/types'
+import { DateRange, Picker } from '../Calendar/types'
+import { transition } from '../Calendar/utils'
 import Icon from '../Icon'
 import {
   Popover,
@@ -18,8 +19,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '../Popover'
-
-type DateRange = [Dayjs | null, Dayjs | null]
 
 type Props = {
   picker?: Picker
@@ -37,7 +36,7 @@ const DatePicker: FC<Props> = ({
   const startValueRef = useRef<HTMLInputElement>(null)
   const endValueRef = useRef<HTMLInputElement>(null)
 
-  const [uncontrolledValue, setUncontrolledValue] = useState<DateRange>([
+  const [uncontrolledValue, setUncontrolledValue] = useState<DateRange>(() => [
     dayjs(),
     dayjs(),
   ])
@@ -59,13 +58,35 @@ const DatePicker: FC<Props> = ({
 
   const [currentView, setCurrentView] = useState(value[1] ?? dayjs())
 
-  const next = useCallback((unit: ManipulateType) => {
-    setCurrentView((x) => x.add(1, unit))
-  }, [])
+  const [direction, setDirection] = useState<number>(0)
 
-  const prev = useCallback((unit: ManipulateType) => {
-    setCurrentView((x) => x.subtract(1, unit))
-  }, [])
+  const changeCurrentView = useCallback(
+    (next: Dayjs | ((current: Dayjs) => Dayjs)) => {
+      setDirection(
+        currentView.isAfter(
+          typeof next === 'function' ? next(currentView) : next,
+        )
+          ? -1
+          : 1,
+      )
+      setCurrentView(next)
+    },
+    [currentView],
+  )
+
+  const next = useCallback(
+    (unit: ManipulateType) => {
+      changeCurrentView((x) => x.add(1, unit))
+    },
+    [changeCurrentView],
+  )
+
+  const prev = useCallback(
+    (unit: ManipulateType) => {
+      changeCurrentView((x) => x.subtract(1, unit))
+    },
+    [changeCurrentView],
+  )
 
   const currentPanes = useMemo(() => {
     if (picker === currentPicker) return panes
@@ -77,8 +98,8 @@ const DatePicker: FC<Props> = ({
     if (currentPicker === 'week')
       return `${value.format('YYYY')}-W${value.week()}`
     const formatter: Record<Exclude<Picker, 'week'>, string> = {
-      day: 'DD/MM/YYYY',
-      month: 'MM/YYYY',
+      day: 'YYYY/MM/DD',
+      month: 'YYYY/MM',
       year: 'YYYY',
     }
     return value.format(formatter[currentPicker])
@@ -109,6 +130,10 @@ const DatePicker: FC<Props> = ({
     setValue([startValue, endValue])
   }, [endValue, setValue, startValue])
 
+  const togglePopover = () => {
+    setOpen((state) => !state)
+  }
+
   useEffect(() => {
     if (!open) {
       setActiveField('start')
@@ -120,20 +145,40 @@ const DatePicker: FC<Props> = ({
   }, [picker])
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
+    <Popover open={open} onOpenChange={setOpen} click={false}>
+      <PopoverTrigger onClick={togglePopover}>
         <div className="relative grid w-min grid-cols-[2fr_1fr_2fr] border focus-within:border-primary-light hover:border-primary-light">
           <AnimatePresence>
             <input
-              className="pointer-events-none text-center"
+              key="start-date"
+              className="cursor-pointer text-center focus:outline-none"
+              readOnly
               value={formatValue(startValue)}
               ref={startValueRef}
+              onClick={(event) => {
+                event.stopPropagation()
+                if (activeField === 'end') {
+                  setActiveField('start')
+                  if (open) return
+                }
+                togglePopover()
+              }}
             />
             <span className="px-2">~</span>
             <input
-              className="pointer-events-none text-center"
+              key="end-date"
+              className="cursor-pointer text-center focus:outline-none"
+              readOnly
               value={formatValue(endValue)}
               ref={endValueRef}
+              onClick={(event) => {
+                event.stopPropagation()
+                if (activeField === 'start') {
+                  setActiveField('end')
+                  if (open) return
+                }
+                togglePopover()
+              }}
             />
             {open && (
               <motion.div
@@ -157,45 +202,50 @@ const DatePicker: FC<Props> = ({
       </PopoverTrigger>
       <PopoverContent className="isolate border-collapse rounded border-neutral bg-white text-sm shadow-lg">
         <div className="grid auto-cols-max auto-rows-max px-[20px] py-[10px] font-medium">
-          <div className="flex items-center justify-between">
-            <div className="flex gap-[10px]">
-              <Icon
-                name="outlined-double-left"
-                className="cursor-pointer hover:fill-primary"
-                onClick={() => prev('year')}
-              />
-              <Icon
-                name="outlined-left"
-                className="cursor-pointer hover:fill-primary"
-                onClick={() => prev('month')}
-              />
+          <MotionConfig transition={transition}>
+            <div className="flex items-center justify-between">
+              <div className="flex gap-[10px]">
+                <Icon
+                  name="outlined-double-left"
+                  className="cursor-pointer hover:fill-primary"
+                  onClick={() => prev('year')}
+                />
+                <Icon
+                  name="outlined-left"
+                  className="cursor-pointer hover:fill-primary"
+                  onClick={() => prev('month')}
+                />
+              </div>
+              <div className="flex justify-center gap-[10px]">
+                <button key="month" onClick={() => setCurrentPicker('month')}>
+                  {currentView?.format('MMM')}
+                </button>
+                <button key="year" onClick={() => setCurrentPicker('year')}>
+                  {currentView?.format('YYYY')}
+                </button>
+              </div>
+              <div className="flex gap-[10px]">
+                <Icon
+                  name="outlined-right"
+                  className="cursor-pointer hover:fill-primary"
+                  onClick={() => next('month')}
+                />
+                <Icon
+                  name="outlined-double-right"
+                  className="cursor-pointer hover:fill-primary"
+                  onClick={() => next('year')}
+                />
+              </div>
             </div>
-            <div className="flex justify-center gap-[10px]">
-              <button onClick={() => setCurrentPicker('month')}>
-                {currentView?.format('MMM')}
-              </button>
-              <button onClick={() => setCurrentPicker('year')}>
-                {currentView?.format('YYYY')}
-              </button>
-            </div>
-            <div className="flex gap-[10px]">
-              <Icon
-                name="outlined-right"
-                className="cursor-pointer hover:fill-primary"
-                onClick={() => next('month')}
-              />
-              <Icon
-                name="outlined-double-right"
-                className="cursor-pointer hover:fill-primary"
-                onClick={() => next('year')}
-              />
-            </div>
-          </div>
-          <Calendar
-            picker={currentPicker}
-            current={currentView}
-            onClick={handleCalendarClick}
-          />
+            <Calendar
+              picker={currentPicker}
+              current={currentView}
+              onClick={handleCalendarClick}
+              range={[startValue, endValue]}
+              activeField={activeField}
+              direction={direction}
+            />
+          </MotionConfig>
         </div>
         <div className="relative flex justify-end gap-[12px] bg-slate-300 px-[16px] py-[10px]">
           <PopoverClose>Cancel</PopoverClose>

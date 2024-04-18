@@ -10,7 +10,7 @@ import { getDays, getWeeks } from './utils'
 
 dayjs.extend(weekOfYear)
 
-interface Props {
+export interface Props {
   startOfWeek?: DayOfWeek
   current?: Dayjs
   selection?: 'date' | 'week'
@@ -35,22 +35,28 @@ const WeekCalendar = ({
     <div className="relative overflow-clip">
       <div className="grid grid-cols-8">
         {daysOfWeek.map((day) => (
-          <span className="aspect-square p-[6px]">{day}</span>
+          <span key={day} className="aspect-square p-[6px]">
+            {day}
+          </span>
         ))}
       </div>
       {weeks.map((week) => {
         const weekNumber = week.at(0)?.week()
         return (
           <button
+            key={week.toString()}
             className="group grid w-full grid-cols-8 hover:bg-primary"
             onClick={() => onClick?.(week[0])}
           >
             <span className="flex aspect-square items-center justify-center p-[6px] text-[10px] text-gray-400">{`W${weekNumber}`}</span>
             {week.map((day) => {
               const sameMonth = day.isSame(current, 'month')
-              if (!sameMonth) return <div />
+              if (!sameMonth) return <div key={day.toString()} />
               return (
-                <span className="flex aspect-square items-center justify-center p-[6px] group-hover:text-white">
+                <span
+                  key={day.toString()}
+                  className="flex aspect-square items-center justify-center p-[6px] group-hover:text-white"
+                >
                   {day.format('D')}
                 </span>
               )

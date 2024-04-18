@@ -33,6 +33,7 @@ interface PopoverOptions {
   modal?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  click?: boolean
 }
 
 const usePopover = ({
@@ -41,6 +42,7 @@ const usePopover = ({
   modal = false,
   open: controlledOpen,
   onOpenChange: setControlledOpen,
+  click: enableClick = true,
 }: PopoverOptions) => {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(initialOpen)
 
@@ -65,7 +67,7 @@ const usePopover = ({
 
   const context = data.context
 
-  const click = useClick(context)
+  const click = useClick(context, { enabled: enableClick })
   const dismiss = useDismiss(context)
   const role = useRole(context)
 

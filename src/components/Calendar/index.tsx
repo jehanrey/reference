@@ -1,16 +1,25 @@
-import { Dayjs } from 'dayjs'
+import DayCalendar, { Props as DayCalendarProps } from './DayCalendar'
+import MonthCalendar, { Props as MonthCalendarProps } from './MonthCalendar'
+import WeekCalendar, { Props as WeekCalendarProps } from './WeekCalendar'
+import YearCalendar, { Props as YearCalendarProps } from './YearCalendar'
 
-import DayCalendar from './DayCalendar'
-import MonthCalendar from './MonthCalendar'
-import WeekCalendar from './WeekCalendar'
-import YearCalendar from './YearCalendar'
-import { Picker } from './types'
+type DayProps = {
+  picker?: 'day'
+} & DayCalendarProps
 
-interface Props {
-  picker?: Picker
-  current?: Dayjs
-  onClick?: (dayjs: Dayjs) => void
-}
+type WeekProps = {
+  picker: 'week'
+} & WeekCalendarProps
+
+type MonthProps = {
+  picker: 'month'
+} & MonthCalendarProps
+
+type YearProps = {
+  picker: 'year'
+} & YearCalendarProps
+
+type Props = DayProps | WeekProps | MonthProps | YearProps
 
 const Calendar = ({ picker, ...props }: Props) => {
   if (picker === 'year') return <YearCalendar {...props} />

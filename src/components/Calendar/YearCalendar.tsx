@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 
 import { getYears } from './utils'
 
-interface Props {
+export interface Props {
   current?: Dayjs
   onClick?: (dayjs: Dayjs) => void
 }
@@ -15,6 +15,7 @@ const YearCalendar = ({ current = dayjs(), onClick }: Props) => {
       {years.map((year) => {
         return (
           <button
+            key={year.toString()}
             className="aspect-[3/2] p-[16px] hover:bg-primary hover:text-white"
             onClick={() => onClick?.(year)}
           >
